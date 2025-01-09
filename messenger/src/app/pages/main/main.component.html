@@ -1,0 +1,23 @@
+<nb-layout>
+  <nb-layout-header>
+    <nb-user [name]="username"
+             [nbContextMenu]="contextMenu"
+             nbContextMenuTag="my-context-menu">
+    </nb-user>
+  </nb-layout-header>
+  <nb-layout-column>
+    <nb-chat title="Messenger">
+      <nb-chat-message *ngFor="let historyMessage of chatHistory"
+                       [type]="'text'"
+                       [message]="historyMessage.message"
+                       [reply]="username != historyMessage.username"
+                       [sender]="historyMessage.username"
+                       [dateFormat]="'d-MMM-yyyy h:mm:ss'"
+                       [date]="historyMessage.sendingDateTime">
+      </nb-chat-message>
+
+      <nb-chat-form (send)="sendMessage($event)" [dropFiles]="false">
+      </nb-chat-form>
+    </nb-chat>
+  </nb-layout-column>
+</nb-layout>

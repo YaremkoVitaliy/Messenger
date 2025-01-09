@@ -1,0 +1,82 @@
+.login-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+
+  .login-container {
+    display: grid;
+    grid-template-rows: 50px 1fr 30px 40px;
+    width: 320px;
+    height: 260px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+    border-radius: 5px;
+
+    .header-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background-color: #3f51b5;
+      box-sizing: border-box;
+      align-items: center;
+      padding-left: 15px;
+
+      h3 {
+        font-size: 20px;
+        font-weight: 400;
+        color: #FFFFFFDE;
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    .credentials-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      justify-content: center;
+      grid-gap: 10px;
+
+      ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+        background-color: #FFFFFFDE !important;
+      }
+    }
+
+    .message-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      align-items: center;
+
+      p {
+        padding: 0;
+        margin: 0;
+        font-weight: 400;
+      }
+    }
+
+    .login-button-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.mat-raised-button {
+  color: #FFFFFFDE;
+  font-weight: 400;
+  width: 100px;
+  height: 30px;
+  line-height: 24px !important;
+  text-align: center;
+}
