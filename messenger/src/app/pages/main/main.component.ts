@@ -34,6 +34,7 @@ export class MainComponent implements OnInit {
         catchError(err => throwError(err))
       )
       .subscribe(() => {
+        this.scrollToBottom();
       });
 
     this.nbMenuService.onItemClick()
@@ -46,6 +47,7 @@ export class MainComponent implements OnInit {
       .subscribe(message => {
         if (message) {
           this.chatHistory?.push(message);
+          this.scrollToBottom();
         }
       })
   }
@@ -63,5 +65,11 @@ export class MainComponent implements OnInit {
     this.authService.logout();
     this.router.navigateByUrl('/login')
       .then(() => this.webSocketService.disconnect());
+  }
+
+  scrollToBottom() {
+    setTimeout(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    }, 0);
   }
 }

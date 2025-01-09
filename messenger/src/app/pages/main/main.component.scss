@@ -6,6 +6,12 @@ nb-chat {
   width: 500px;
 }
 
+:host nb-layout-header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
 :host nb-layout-header ::ng-deep nav {
   justify-content: flex-end;
 }
