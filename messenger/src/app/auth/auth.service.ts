@@ -17,17 +17,27 @@ export class AuthService {
               private jwtHelper: JwtHelperService) {
   }
 
-  login(username: string, password: string): Observable<HttpResponse<Object>> {
+  public login(username: string, password: string): Observable<HttpResponse<Object>> {
+    return this.authenticate(username, password, server.loginEndpoint);
+  }
+
+  public signUp(username: string, password: string): Observable<HttpResponse<Object>> {
+    return this.authenticate(username, password, server.signUpEndpoint);
+  }
+
+  private authenticate(username: string, password: string, endpoint: string): Observable<HttpResponse<Object>> {
     const headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<HttpResponse<Object>>(this.getLoginURL(), btoa(JSON.stringify({
-      username, password
-    })), {
-      observe: 'response',
-      headers
-    })
+    return this.http.post<HttpResponse<Object>>(this.getUrlOrigin() + endpoint,
+      btoa(JSON.stringify({
+        username, password
+      })),
+      {
+        observe: 'response',
+        headers
+      })
       .pipe(
         tap((data: HttpResponse<Object>) => {
             const authHeader: string | null = data.headers.get('Authorization');
@@ -38,8 +48,8 @@ export class AuthService {
         ));
   }
 
-  private getLoginURL(): string {
-    return server.host + ':' + server.port + server.loginEndpoint;
+  private getUrlOrigin(): string {
+    return server.host + ':' + server.port;
   }
 
   logout(): void {

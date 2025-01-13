@@ -36,4 +36,22 @@ export class LoginComponent {
         this.message = '';
       });
   }
+
+  signUp(): void {
+    this.message = 'Trying to sign up ...';
+
+    this.authService.signUp(this.username, this.password)
+      .subscribe(data => {
+        if (this.authService.isLoggedIn()) {
+          this.message = 'Sign up is successful';
+          this.router.navigateByUrl('/').then(() => this.webSocketService.connect());
+        } else {
+          this.message = 'Error occurred during sign up';
+        }
+      }, error => {
+        this.message = 'Error occurred during sign up';
+      }, () => {
+        this.message = '';
+      });
+  }
 }

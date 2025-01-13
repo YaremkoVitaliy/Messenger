@@ -3,7 +3,7 @@ package com.messenger.messengerservice.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.messenger.messengerservice.model.User;
 import com.messenger.messengerservice.service.impl.UserDetailsServiceImpl;
-import io.jsonwebtoken.io.Decoders;
+import com.messenger.messengerservice.utils.Base64DecoderUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,10 +19,6 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 
 @Configurable
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
@@ -46,8 +42,7 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
             throws AuthenticationException, IOException {
 
         if (HttpMethod.POST.name().equals(request.getMethod())) {
-
-            byte[] authData = decodeBase64(request.getInputStream());
+            byte[] authData = Base64DecoderUtils.decodeBase64(request.getInputStream());
 
             UserDetails user = new ObjectMapper().readValue(authData, User.class);
             UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(
@@ -70,19 +65,4 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
-
-    private byte[] decodeBase64(InputStream in) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        char[] buf = new char[4096];
-
-        try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
-            int read;
-            while ((read = reader.read(buf)) >= 0) {
-                sb.append(buf, 0, read);
-            }
-        }
-
-        return Decoders.BASE64.decode(sb.toString());
-    }
-
 }
