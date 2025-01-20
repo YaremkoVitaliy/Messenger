@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {catchError, map, throwError} from "rxjs";
+import {catchError, map, Observable, Subscription, throwError} from "rxjs";
 import {Message} from "../../model/message";
 import {server} from "../../../resources/server-settings";
 
@@ -9,14 +9,14 @@ import {server} from "../../../resources/server-settings";
 })
 export class MainService {
 
-  constructor(protected http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
-  public getChatHistory() {
+  public getChatHistory(): Observable<Message[]> {
     return this.http.get<Message[]>(this.getMessageApiURL() + '/history');
   }
 
-  public sendMessage(message: Message) {
+  public sendMessage(message: Message): Subscription {
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
     headers = headers.append('Accept', 'application/json');
@@ -29,10 +29,10 @@ export class MainService {
       })
       .pipe(
         map(response => response),
-        catchError(err => throwError(err))
+        catchError(err => throwError(() => err))
       )
       .subscribe({
-        error: (error) => {
+        error: (error): void => {
           console.log('Error occurred while trying to send message.', error);
           alert('Message wasn\'t sent due to error: ' + error)
         }

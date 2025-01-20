@@ -11,10 +11,10 @@ import {LocalStorage} from "../../resources/local-storage";
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token: string | null = localStorage.getItem(LocalStorage.TOKEN);
     if (token) {
-      var clonedRequest = request.clone({
+      var clonedRequest: HttpRequest<any> = request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
         }

@@ -1,5 +1,6 @@
 package com.messenger.messengerservice.service.impl;
 
+import com.messenger.messengerservice.dto.AuthRequestDTO;
 import com.messenger.messengerservice.model.User;
 import com.messenger.messengerservice.repository.UserRepository;
 import com.messenger.messengerservice.service.UserService;
@@ -21,10 +22,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(this.encoder.encode(user.getPassword()));
-        return this.userRepository.save(newUser);
+    public User createUser(AuthRequestDTO authRequest) {
+        User user = new User();
+        user.setUsername(authRequest.getUsername());
+        user.setPassword(this.encoder.encode(authRequest.getPassword()));
+        return this.userRepository.save(user);
     }
 }

@@ -14,9 +14,9 @@ import {WebSocketService} from "../../socket/web-socket.service";
 })
 export class MainComponent implements OnInit {
 
-  contextMenu: { title: string }[] = [{title: 'Logout'}];
-  username: string = 'Unknown';
-  chatHistory?: Message[];
+  public contextMenu: { title: string }[] = [{title: 'Logout'}];
+  public username: string = 'Unknown';
+  public chatHistory?: Message[];
 
   constructor(private router: Router,
               private mainService: MainService,
@@ -31,9 +31,9 @@ export class MainComponent implements OnInit {
     this.mainService.getChatHistory()
       .pipe(
         map(response => this.chatHistory = response),
-        catchError(err => throwError(err))
+        catchError(err => throwError(() => err))
       )
-      .subscribe(() => {
+      .subscribe((): void => {
         this.scrollToBottom();
       });
 
@@ -52,7 +52,7 @@ export class MainComponent implements OnInit {
       })
   }
 
-  sendMessage(event: { message: string, files: File[] }): void {
+  public sendMessage(event: { message: string, files: File[] }): void {
     if (event.message.length > 200) {
       alert("Message length must be not greater than 200 characters!");
       return;
@@ -61,14 +61,14 @@ export class MainComponent implements OnInit {
     this.mainService.sendMessage(message);
   }
 
-  logout(): void {
+  private logout(): void {
     this.authService.logout();
     this.router.navigateByUrl('/login')
       .then(() => this.webSocketService.disconnect());
   }
 
-  scrollToBottom() {
-    setTimeout(() => {
+  private scrollToBottom(): void {
+    setTimeout((): void => {
       window.scrollTo(0, document.body.scrollHeight);
     }, 0);
   }

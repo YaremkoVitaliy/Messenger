@@ -42,8 +42,8 @@
       justify-content: center;
       grid-gap: 10px;
 
-      ::ng-deep .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-        background-color: #FFFFFFDE !important;
+      .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+        background-color: #FFFFFFDE;
       }
     }
 
@@ -79,6 +79,6 @@
   font-weight: 400;
   width: 100px;
   height: 30px;
-  line-height: 24px !important;
+  line-height: 24px;
   text-align: center;
 }

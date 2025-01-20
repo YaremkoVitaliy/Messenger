@@ -1,6 +1,7 @@
 package com.messenger.messengerservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ public class Message {
     private Long id;
 
     @Column(nullable = false)
+    @Size(min = 1, max = 200)
     private String message;
 
     @Column(name = "sending_date_time", nullable = false)

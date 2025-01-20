@@ -15,24 +15,24 @@ export class WebSocketService {
   stompClient: Client | null = null;
   messageSubject: Subject<Message> = new Subject<Message>();
 
-  connect() {
+  public connect(): void {
     const ws: WebSocket = new SockJS(this.getWebSocketURL());
     this.stompClient = Stomp.over(ws);
 
-    this.stompClient.onConnect = (frame: IFrame) => {
-      this.stompClient?.subscribe(webSocket.topic, (message: IMessage) => {
+    this.stompClient.onConnect = (frame: IFrame): void => {
+      this.stompClient?.subscribe(webSocket.topic, (message: IMessage): void => {
         this.messageSubject.next(JSON.parse(message.body));
       });
     };
 
-    this.stompClient.onStompError = (frame: IFrame) => {
+    this.stompClient.onStompError = (frame: IFrame): void => {
       console.error('Error occurred: ' + frame.headers['message']);
     };
 
     this.stompClient?.activate();
   };
 
-  disconnect() {
+  public disconnect(): void {
     if (this.stompClient?.connected) {
       this.stompClient.deactivate();
     }
