@@ -3,8 +3,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {server} from "../../resources/server-settings";
-import {LocalStorage} from "../../resources/local-storage";
+import {server} from "../../shared/constants/server-settings";
+import {LocalStorage} from "../../shared/constants/local-storage";
 
 @Injectable({
   providedIn: 'root'

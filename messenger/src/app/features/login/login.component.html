@@ -1,0 +1,37 @@
+<div [className]="'login-wrapper'">
+  <div [className]="'login-container'">
+    <div [className]="'header-container'">
+      <h3>Login</h3>
+    </div>
+
+    <div [className]="'credentials-container'">
+      <mat-form-field class="full-width" subscriptSizing="dynamic">
+        <mat-label>Username</mat-label>
+        <input matInput [(ngModel)]="username" type="text" id="usernameInput" name="usernameInput"
+               placeholder="Username" required minlength="4" maxlength="50" #usernameInput="ngModel">
+      </mat-form-field>
+      <mat-form-field class="full-width" subscriptSizing="dynamic">
+        <mat-label>Password</mat-label>
+        <input matInput [(ngModel)]="password" type="password" id="passwordInput" name="passwordInput"
+               placeholder="Password" required minlength="4" maxlength="20" #passwordInput="ngModel">
+      </mat-form-field>
+    </div>
+
+    <div [className]="'message-container'">
+      <p>{{ message }}</p>
+    </div>
+
+    <div [className]="'action-container'">
+      <button mat-raised-button color="primary" class="mat-raised-button" (click)="login()"
+              [disabled]="usernameInput.errors?.['minlength'] || passwordInput.errors?.['minlength']
+                          || usernameInput.errors?.['required'] || passwordInput.errors?.['required']">
+        Login
+      </button>
+      <button mat-raised-button color="primary" class="mat-raised-button" (click)="signUp()"
+              [disabled]="usernameInput.errors?.['minlength'] || passwordInput.errors?.['minlength']
+                          || usernameInput.errors?.['required'] || passwordInput.errors?.['required']">
+        Sign up
+      </button>
+    </div>
+  </div>
+</div>

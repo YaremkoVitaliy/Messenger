@@ -1,14 +1,19 @@
 package com.messenger.messengerservice.dto;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
 public class MessageDTO {
 
+    @NotNull
     @Size(min = 1, max = 200)
     private String message;
+    @NotNull
     private LocalDateTime sendingDateTime;
+    @NotNull
+    @Size(min = 4, max = 50)
     private String username;
 
     public String getMessage() {

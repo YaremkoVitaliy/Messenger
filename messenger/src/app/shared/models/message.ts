@@ -1,8 +1,8 @@
 export class Message {
 
-  message: string;
-  sendingDateTime: Date;
-  username: string;
+  public message: string;
+  public sendingDateTime: Date;
+  public username: string;
 
   constructor(message: string,
               sendingDateTime: Date,

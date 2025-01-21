@@ -1,26 +1,27 @@
 import {Injectable} from "@angular/core";
 import {Subject} from "rxjs";
-import {Message} from "../model/message";
-import {server} from "../../resources/server-settings";
-import {Client, IFrame, IMessage, Stomp} from "@stomp/stompjs";
-import {webSocket} from "../../resources/web-socket-settings";
+import {Message} from "../../shared/models/message";
+import {server} from "../../shared/constants/server-settings";
+import {Client, IFrame, IMessage, Stomp, StompSubscription} from "@stomp/stompjs";
+import {webSocket} from "../../shared/constants/web-socket-settings";
 import * as SockJS from "sockjs-client";
-import {LocalStorage} from "../../resources/local-storage";
+import {LocalStorage} from "../../shared/constants/local-storage";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
 
-  stompClient: Client | null = null;
-  messageSubject: Subject<Message> = new Subject<Message>();
+  private stompClient: Client | null = null;
+  private stompSubscription: StompSubscription | undefined;
+  public messageSubject: Subject<Message> = new Subject<Message>();
 
   public connect(): void {
     const ws: WebSocket = new SockJS(this.getWebSocketURL());
     this.stompClient = Stomp.over(ws);
 
     this.stompClient.onConnect = (frame: IFrame): void => {
-      this.stompClient?.subscribe(webSocket.topic, (message: IMessage): void => {
+      this.stompSubscription = this.stompClient?.subscribe(webSocket.topic, (message: IMessage): void => {
         this.messageSubject.next(JSON.parse(message.body));
       });
     };
@@ -34,6 +35,7 @@ export class WebSocketService {
 
   public disconnect(): void {
     if (this.stompClient?.connected) {
+      this.stompSubscription?.unsubscribe();
       this.stompClient.deactivate();
     }
   }

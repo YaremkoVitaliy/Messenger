@@ -1,6 +1,7 @@
 package com.messenger.messengerservice.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,6 +18,7 @@ public class User implements UserDetails {
     private Integer id;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 4, max = 50)
     private String username;
 
     @Column(nullable = false)

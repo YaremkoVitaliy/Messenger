@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {catchError, map, Observable, Subscription, throwError} from "rxjs";
-import {Message} from "../../model/message";
-import {server} from "../../../resources/server-settings";
+import {Message} from "../../shared/models/message";
+import {server} from "../../shared/constants/server-settings";
 
 @Injectable({
   providedIn: 'root'

@@ -1,22 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {MainService} from "./main.service";
-import {Message} from "../../model/message";
-import {AuthService} from "../../auth/auth.service";
-import {catchError, filter, map, throwError} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MainService} from "../../core/services/main.service";
+import {Message} from "../../shared/models/message";
+import {AuthService} from "../../core/auth/auth.service";
+import {catchError, filter, map, Subscription, throwError} from "rxjs";
 import {Router} from "@angular/router";
 import {NbMenuService} from "@nebular/theme";
-import {WebSocketService} from "../../socket/web-socket.service";
+import {WebSocketService} from "../../core/services/web-socket.service";
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
 
   public contextMenu: { title: string }[] = [{title: 'Logout'}];
   public username: string = 'Unknown';
   public chatHistory?: Message[];
+  private chatHistorySubscription?: Subscription;
+  private nbMenuSubscription?: Subscription;
+  private webSocketSubscription?: Subscription;
+  private messageSubscription?: Subscription;
 
   constructor(private router: Router,
               private mainService: MainService,
@@ -28,7 +32,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.username = this.authService.getUsername();
 
-    this.mainService.getChatHistory()
+    this.chatHistorySubscription = this.mainService.getChatHistory()
       .pipe(
         map(response => this.chatHistory = response),
         catchError(err => throwError(() => err))
@@ -37,13 +41,13 @@ export class MainComponent implements OnInit {
         this.scrollToBottom();
       });
 
-    this.nbMenuService.onItemClick()
+    this.nbMenuSubscription = this.nbMenuService.onItemClick()
       .pipe(
         filter(({tag}) => tag === 'my-context-menu'),
       )
       .subscribe(() => this.logout());
 
-    this.webSocketService.messageSubject.asObservable()
+    this.webSocketSubscription = this.webSocketService.messageSubject.asObservable()
       .subscribe(message => {
         if (message) {
           this.chatHistory?.push(message);
@@ -52,13 +56,20 @@ export class MainComponent implements OnInit {
       })
   }
 
+  ngOnDestroy(): void {
+    this.chatHistorySubscription?.unsubscribe();
+    this.nbMenuSubscription?.unsubscribe();
+    this.webSocketSubscription?.unsubscribe();
+    this.messageSubscription?.unsubscribe();
+  }
+
   public sendMessage(event: { message: string, files: File[] }): void {
     if (event.message.length > 200) {
       alert("Message length must be not greater than 200 characters!");
       return;
     }
     let message: Message = new Message(event.message, new Date(), this.username);
-    this.mainService.sendMessage(message);
+    this.messageSubscription = this.mainService.sendMessage(message);
   }
 
   private logout(): void {

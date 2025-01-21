@@ -4,6 +4,7 @@ import com.messenger.messengerservice.auth.TokenHandler;
 import com.messenger.messengerservice.dto.AuthRequestDTO;
 import com.messenger.messengerservice.model.User;
 import com.messenger.messengerservice.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> logIn(@RequestBody AuthRequestDTO authRequest) {
+    public ResponseEntity<String> logIn(@Valid @RequestBody AuthRequestDTO authRequest) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(authRequest.getUsername());
 
         Authentication authentication = this.authenticationManager.authenticate(
@@ -55,7 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody AuthRequestDTO authRequest) {
+    public ResponseEntity<String> signUp(@Valid @RequestBody AuthRequestDTO authRequest) {
         User newUser = this.userService.createUser(authRequest);
 
         Authentication authentication = this.authenticationManager.authenticate(
